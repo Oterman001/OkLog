@@ -27,6 +27,7 @@ public class LogConfig {
     public boolean mShouldFormatJson =true;//是否格式化json
     public boolean mPrintCrash =true;
     public boolean mPrintOneline=false;//打印成一行
+    public boolean mIgnoreTag=true;//是否忽略传入的tag;
 
     private ThreadFormatter mThreadFormatter;
     private StackTraceFormatter mStackTraceFormatter;
@@ -185,6 +186,10 @@ public class LogConfig {
             return this;
         }
 
+        public Builder ignoreTag(boolean ignoreTag){
+            logConfig.mIgnoreTag=ignoreTag;
+            return this;
+        }
         /**
          * 内容过滤
          */

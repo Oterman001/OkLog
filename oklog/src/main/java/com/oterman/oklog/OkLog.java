@@ -368,7 +368,11 @@ public class OkLog {
      */
     private static void handlePrint(int logLevel, String tag, String msg, boolean printToRemote) {
         //需要输出
-        tag = TextUtils.isEmpty(tag) ? sLogConfig.getStackTraceInfo(true) : tag;
+        if(sLogConfig.mIgnoreTag){
+            tag =sLogConfig.getStackTraceInfo(true);
+        }else {
+            tag = TextUtils.isEmpty(tag) ? sLogConfig.getStackTraceInfo(true) : tag;
+        }
 
         if (printToRemote) {
             putLogItem(logLevel, tag, msg);
