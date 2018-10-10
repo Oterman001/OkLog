@@ -378,6 +378,7 @@ public class OkLog {
             putLogItem(logLevel, tag, msg);
         }
 
+
         sPrinterSet.handlePrintln(logLevel, tag, msg);
     }
 
