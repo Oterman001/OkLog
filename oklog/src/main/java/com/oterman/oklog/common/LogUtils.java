@@ -154,6 +154,10 @@ public class LogUtils {
         StackTraceElement[] stackTrace = getStackTrace();
         StackTraceElement stackTraceElement = stackTrace[0];
 
+        if(stackTraceElement.getFileName().contains("LogUtil")){
+            stackTraceElement=stackTrace[1];
+        }
+
         StringBuilder sb=new StringBuilder("(")
                 .append(stackTraceElement.getFileName())
                 .append(":")
