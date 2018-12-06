@@ -85,12 +85,13 @@ public class OkLog {
      * 每隔1s去检测ANR是否发生
      */
     private static void initDetectAnr() {
-        sScheduledThreadPool = Executors.newScheduledThreadPool(1);
-        final ActivityManager activityManager = (ActivityManager) sContext.getSystemService(Context.ACTIVITY_SERVICE);
+        if (sLogConfig.mDetectANR){
+            sScheduledThreadPool = Executors.newScheduledThreadPool(1);
+            final ActivityManager activityManager = (ActivityManager) sContext.getSystemService(Context.ACTIVITY_SERVICE);
 
-        sScheduledThreadPool.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
+            sScheduledThreadPool.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
                     List<ActivityManager.ProcessErrorStateInfo> processList = activityManager.getProcessesInErrorState();
                     if (processList != null) {
                         Iterator<ActivityManager.ProcessErrorStateInfo> iterator = processList.iterator();
@@ -107,9 +108,13 @@ public class OkLog {
                         }
                     }
 
-            }
+                }
 
-        }, 0, 1, TimeUnit.SECONDS);
+            }, 0, 1, TimeUnit.SECONDS);
+        }else {
+            Log.e("OkLog","不检测anr");
+        }
+
 
     }
 

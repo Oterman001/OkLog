@@ -26,6 +26,7 @@ public class LogConfig {
     public boolean mPrintProcessInfo =false;//是否打印进程信息
     public boolean mShouldFormatJson =true;//是否格式化json
     public boolean mPrintCrash =true;
+    public boolean mDetectANR =false;
     public boolean mPrintOneline=false;//打印成一行
     public boolean mIgnoreTag=true;//是否忽略传入的tag;
 
@@ -145,6 +146,13 @@ public class LogConfig {
          */
         public Builder printCrash(boolean shouldPrintCrash){
             logConfig.mPrintCrash =shouldPrintCrash;
+            return this;
+        }
+        /**
+         * 是否检测ANR信息
+         */
+        public Builder detectANR(boolean shouldDetectANR){
+            logConfig.mDetectANR =shouldDetectANR;
             return this;
         }
 
