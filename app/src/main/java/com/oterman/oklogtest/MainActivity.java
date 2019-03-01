@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                int i=1/0;
+//                int i=1/0;
             }
         });
 

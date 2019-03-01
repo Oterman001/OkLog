@@ -30,7 +30,7 @@
 
 ```
 	dependencies {
-	        implementation 'com.github.Oterman1314:OkLog:{latestVersion}'
+	        implementation 'com.github.Oterman001:OkLog:{latestVersion}'
 	}
 	
 
