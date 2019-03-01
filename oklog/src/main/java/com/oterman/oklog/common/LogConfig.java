@@ -28,7 +28,7 @@ public class LogConfig {
     public boolean mPrintCrash =true;
     public boolean mDetectANR =false;
     public boolean mPrintOneline=false;//打印成一行
-    public boolean mIgnoreTag=true;//是否忽略传入的tag;
+    public boolean mIgnoreTag=false;//是否忽略传入的tag;
 
     private ThreadFormatter mThreadFormatter;
     private StackTraceFormatter mStackTraceFormatter;
@@ -92,9 +92,16 @@ public class LogConfig {
     }
 
     public String getStackTraceInfo(boolean shoudPrintStackTrace){
+        return getStackTraceInfo(shoudPrintStackTrace,1);
+    }
+
+    public String getStackTraceInfo(boolean shoudPrintStackTrace,int depth){
         if (!shoudPrintStackTrace)return "";
 
-        return  LogUtils.getSimpleStackTrace();
+        if (depth<1){
+            depth=1;
+        }
+        return  LogUtils.getSimpleStackTrace(depth);
     }
 
     /**
@@ -194,6 +201,7 @@ public class LogConfig {
             return this;
         }
 
+        @Deprecated
         public Builder ignoreTag(boolean ignoreTag){
             logConfig.mIgnoreTag=ignoreTag;
             return this;

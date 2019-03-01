@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +77,7 @@ public class OkLog {
         //初始化检测anr
         initDetectAnr();
 
-        Log.d("OkLog", "BHLog初始化成功");
+        Log.d("OkLog", "OkLog初始化成功");
     }
 
     /**
@@ -153,134 +152,99 @@ public class OkLog {
         }
     }
 
+
     public static void v(String msg) {
         v(null, msg);
     }
 
-    public static void v(String tag, String msg) {
-        checkInitialized();
-        v(tag, msg, true);
+    public static void v(String msg,int stackTraceDepth) {
+        v(null, msg,stackTraceDepth);
     }
 
-    public static void v(String tag, String msg, boolean printToRemote) {
+    public static void v(String tag, String msg) {
+        v(tag, msg, 1);
+    }
+
+    public static void v(String tag, String msg, int  stackTraceDepth) {
         checkInitialized();
-        handlePrint(LogLevel.VERBOSE, tag, msg, printToRemote);
+        handlePrint(LogLevel.VERBOSE, tag, msg, stackTraceDepth);
     }
 
     public static void v(String msg, Throwable throwable) {
         v(null, msg, throwable);
     }
-
     public static void v(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        handlePrint(LogLevel.VERBOSE, tag, msg, throwable, true);
-    }
-
-    /**
-     * 自定义打印日志信息
-     *
-     * @param tag              标签
-     * @param msg              信息
-     * @param printThreadInfo  是否打印线程信息
-     * @param printProcessInfo 是否打印进程信息
-     * @param printStackTrace  是否答应调用栈信息
-     */
-    public static void v(String tag, String msg, boolean printThreadInfo, boolean printProcessInfo, boolean printStackTrace) {
-        checkInitialized();
-        handlePrint(LogLevel.VERBOSE, tag, msg, printThreadInfo, printProcessInfo, printStackTrace, true);
-    }
-
-    public static void i(String msg) {
-        i(null, msg);
-    }
-
-    public static void i(String tag, String msg) {
-        i(tag, msg, true);
-    }
-
-    public static void i(String tag, String msg, boolean printToRemote) {
-        checkInitialized();
-        handlePrint(LogLevel.INFO, tag, msg, printToRemote);
-    }
-
-    public static void i(String msg, Throwable throwable) {
-        i(null, msg, throwable);
-    }
-
-    public static void i(String tag, String msg, Throwable throwable) {
-        checkInitialized();
-        handlePrint(LogLevel.INFO, tag, msg, throwable, true);
-    }
-
-
-    /**
-     * 自定义打印日志信息
-     *
-     * @param tag              标签
-     * @param msg              信息
-     * @param printThreadInfo  是否打印线程信息
-     * @param printProcessInfo 是否打印进程信息
-     * @param printStackTrace  是否答应调用栈信息
-     */
-    public static void i(String tag, String msg, boolean printThreadInfo, boolean printProcessInfo, boolean printStackTrace) {
-        checkInitialized();
-        handlePrint(LogLevel.INFO, tag, msg, printThreadInfo, printProcessInfo, printStackTrace, true);
+        handlePrint (LogLevel.VERBOSE, tag, msg, throwable);
     }
 
     public static void d(String msg) {
         d(null, msg);
     }
 
-    public static void d(String tag, String msg) {
-        checkInitialized();
-        handlePrint(LogLevel.DEBUG, tag, msg, true);
+    public static void d(String msg,int stackTraceDepth) {
+        d(null, msg,stackTraceDepth);
     }
 
-    public static void d(String tag, String msg, boolean printToRemote) {
+    public static void d(String tag, String msg) {
+        d(tag, msg, 1);
+    }
+
+    public static void d(String tag, String msg, int  stackTraceDepth) {
         checkInitialized();
-        handlePrint(LogLevel.DEBUG, tag, msg, printToRemote);
+        handlePrint(LogLevel.DEBUG, tag, msg, stackTraceDepth);
     }
 
     public static void d(String msg, Throwable throwable) {
         d(null, msg, throwable);
     }
-
     public static void d(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        d(tag, msg, throwable, true);
+        handlePrint (LogLevel.DEBUG, tag, msg, throwable);
+    }
+    
+
+    public static void i(String msg) {
+        i(null, msg);
     }
 
-    public static void d(String tag, String msg, Throwable throwable, boolean printToRemote) {
-        checkInitialized();
-        handlePrint(LogLevel.DEBUG, tag, msg, throwable, printToRemote);
+    public static void i(String msg,int stackTraceDepth) {
+        i(null, msg,stackTraceDepth);
     }
 
-    /**
-     * 自定义打印日志信息
-     *
-     * @param tag              标签
-     * @param msg              信息
-     * @param printThreadInfo  是否打印线程信息
-     * @param printProcessInfo 是否打印进程信息
-     * @param printStackTrace  是否答应调用栈信息
-     */
-    public static void d(String tag, String msg, boolean printThreadInfo, boolean printProcessInfo, boolean printStackTrace) {
-        checkInitialized();
-        handlePrint(LogLevel.DEBUG, tag, msg, printThreadInfo, printProcessInfo, printStackTrace, true);
+    public static void i(String tag, String msg) {
+        i(tag, msg, 1);
     }
+
+    public static void i(String tag, String msg, int  stackTraceDepth) {
+        checkInitialized();
+        handlePrint(LogLevel.INFO, tag, msg, stackTraceDepth);
+    }
+
+    public static void i(String msg, Throwable throwable) {
+        i(null, msg, throwable);
+    }
+    public static void i(String tag, String msg, Throwable throwable) {
+        checkInitialized();
+        handlePrint (LogLevel.INFO, tag, msg, throwable);
+    }
+
 
     public static void w(String msg) {
         w(null, msg);
     }
 
-    public static void w(String tag, String msg) {
-        checkInitialized();
-        handlePrint(LogLevel.WARN, tag, msg, true);
+    public static void w(String msg,int stackTraceDepth) {
+        w(null, msg,stackTraceDepth);
     }
 
-    public static void w(String tag, String msg, boolean printToRemote) {
+    public static void w(String tag, String msg) {
+        w(tag, msg, 1);
+    }
+
+    public static void w(String tag, String msg, int  stackTraceDepth) {
         checkInitialized();
-        handlePrint(LogLevel.WARN, tag, msg, printToRemote);
+        handlePrint(LogLevel.WARNING, tag, msg, stackTraceDepth);
     }
 
     public static void w(String msg, Throwable throwable) {
@@ -289,71 +253,58 @@ public class OkLog {
 
     public static void w(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        w(tag, msg, throwable, true);
-    }
-
-    public static void w(String tag, String msg, Throwable throwable, boolean printToRemote) {
-        checkInitialized();
-        handlePrint(LogLevel.WARN, tag, msg, throwable, printToRemote);
-    }
-
-    /**
-     * 自定义打印日志信息
-     *
-     * @param tag              标签
-     * @param msg              信息
-     * @param printThreadInfo  是否打印线程信息
-     * @param printProcessInfo 是否打印进程信息
-     * @param printStackTrace  是否答应调用栈信息
-     */
-    public static void w(String tag, String msg, boolean printThreadInfo, boolean printProcessInfo, boolean printStackTrace) {
-        checkInitialized();
-        handlePrint(LogLevel.WARN, tag, msg, printThreadInfo, printProcessInfo, printStackTrace, true);
+        handlePrint(LogLevel.WARNING, tag, msg, throwable);
     }
 
     public static void e(String msg) {
         e(null, msg);
     }
 
-    public static void e(String tag, String msg) {
-        e(tag, msg, true);
+    public static void e(String msg,int stackTraceDepth) {
+        e(null, msg,stackTraceDepth);
     }
 
-    public static void e(String tag, String msg, boolean printToRemote) {
+    public static void e(String tag, String msg) {
+        e(tag, msg, 1);
+    }
+
+    public static void e(String tag, String msg, int  stackTraceDepth) {
         checkInitialized();
-        handlePrint(LogLevel.ERROR, tag, msg, printToRemote);
+        handlePrint(LogLevel.ERROR, tag, msg, stackTraceDepth);
     }
 
     public static void e(String msg, Throwable throwable) {
-        e(null, msg, throwable, true);
-    }
-
-    public static void e(String msg, Throwable throwable, boolean printToRemote) {
-        e(null, msg, throwable, printToRemote);
+        e(null, msg, throwable);
     }
 
     public static void e(String tag, String msg, Throwable throwable) {
-        e(tag, msg, throwable, true);
-    }
-
-    public static void e(String tag, String msg, Throwable throwable, boolean printToRemote) {
         checkInitialized();
-        handlePrint(LogLevel.ERROR, tag, msg, throwable, printToRemote);
+        handlePrint(LogLevel.ERROR, tag, msg, throwable);
     }
 
     /**
-     * 自定义打印日志信息
-     *
-     * @param tag              标签
-     * @param msg              信息
-     * @param printThreadInfo  是否打印线程信息
-     * @param printProcessInfo 是否打印进程信息
-     * @param printStackTrace  是否答应调用栈信息
+     * 处理日志的输出
      */
-    public static void e(String tag, String msg, boolean printThreadInfo, boolean printProcessInfo, boolean printStackTrace, boolean printToRemote) {
-        checkInitialized();
-        handlePrint(LogLevel.ERROR, tag, msg, printThreadInfo, printProcessInfo, printStackTrace, printToRemote);
+    private static void handlePrint(int logLevel, String tag, String msg, Throwable tr) {
+        String trMsg = LogUtils.getThrowableInfo(tr);
+        msg = msg + "\n" + trMsg;
+        handlePrint(logLevel, tag, msg,1);
     }
+
+
+    /**
+     * 处理日志的输出
+     */
+    private static void handlePrint(int logLevel, String tag, String msg, int stackTraceDepth ) {
+        //需要输出
+        if(sLogConfig.mIgnoreTag&&stackTraceDepth==1){
+            tag =sLogConfig.getStackTraceInfo(true);
+        }else {
+            tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag :  tag;
+        }
+        sPrinterSet.handlePrintln(logLevel, tag, msg,stackTraceDepth);
+    }
+
 
     /**
      * 将缓存的日志立即写入到文件中，主要解决app被杀掉时日志丢失问题
@@ -368,101 +319,5 @@ public class OkLog {
         }
     }
 
-    /**
-     * 处理日志的输出
-     */
-    private static void handlePrint(int logLevel, String tag, String msg, boolean printToRemote) {
-        //需要输出
-        if(sLogConfig.mIgnoreTag){
-            tag =sLogConfig.getStackTraceInfo(true);
-        }else {
-            tag = TextUtils.isEmpty(tag) ? sLogConfig.getStackTraceInfo(true) : tag;
-        }
-
-        if (printToRemote) {
-            putLogItem(logLevel, tag, msg);
-        }
-
-
-        sPrinterSet.handlePrintln(logLevel, tag, msg);
-    }
-
-    private static void handlePrint(int logLevel, String tag, String msg, boolean printTreadInfo, boolean printProcessInfo, boolean printStackTrace, boolean printToRemote) {
-        tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag : tag;
-
-        if (printToRemote) {
-            putLogItem(logLevel, tag, msg);
-        }
-
-        sPrinterSet.handlePrintln(logLevel, tag, msg, printTreadInfo, printProcessInfo, printStackTrace);
-    }
-
-    /**
-     * 处理日志的输出
-     */
-    private static void handlePrint(int logLevel, String tag, String msg, Throwable tr, boolean printToRemote) {
-        String trMsg = LogUtils.getThrowableInfo(tr);
-        msg = msg + "\n" + trMsg;
-
-        handlePrint(logLevel, tag, msg, printToRemote);
-    }
-
-    /**
-     * 开启实时日志
-     */
-    public static void startOnlineDebug() {
-        Log.e("BHLog_tj", "startOnlineDebug");
-        if (!needOnlineDebug) {
-            needOnlineDebug = true;
-            sLogItems = new LinkedBlockingQueue<>();
-        }
-    }
-
-    /**
-     * 停止实时日志
-     */
-    public static void stopOnlineDebug() {
-        needOnlineDebug = false;
-        if (sLogItems != null) {
-            sLogItems.clear();
-            sLogItems = null;
-        }
-    }
-
-    private static void putLogItem(int loglevel, String tag, String msg) {
-        //检查是否开启实施日志
-        if (!needOnlineDebug || sLogItems == null) {
-            return;
-        }
-
-        try {
-            String simpleStackTrace = LogUtils.getSimpleStackTrace();
-
-//            sLogItems.put(new LogItem(loglevel,tag,msg,simpleStackTrace));
-            sLogItems.offer(new LogItem(loglevel, msg, tag, simpleStackTrace));
-
-            Log.e("BHLog_tj", "putLogItem()  blockingqueue size=" + sLogItems.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static LogItem getLogItem() {
-        if (sLogItems == null || !needOnlineDebug) {
-            return null;
-        }
-
-        try {
-            Log.e("BHLog_tj", "getLogItem(),size=" + sLogItems.size());
-
-            if (sLogItems != null) {
-                return sLogItems.take();
-            }
-            return null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
 }

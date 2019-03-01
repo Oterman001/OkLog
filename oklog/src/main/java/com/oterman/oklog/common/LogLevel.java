@@ -12,7 +12,7 @@ public class LogLevel {
     public static final int VERBOSE = Log.VERBOSE;
     public static final int DEBUG = Log.DEBUG;
     public static final int INFO = Log.INFO;
-    public static final int WARN = Log.WARN;
+    public static final int WARNING = Log.WARN;
     public static final int ERROR = Log.ERROR;
 
     public static  final int OFF=7;
@@ -29,8 +29,8 @@ public class LogLevel {
             case INFO:
                 levelName = "INFO";
                 break;
-            case WARN:
-                levelName = "WARN";
+            case WARNING:
+                levelName = "WARNING";
                 break;
             case ERROR:
                 levelName = "ERROR";
@@ -53,7 +53,7 @@ public class LogLevel {
             case INFO:
                 levelName = "I";
                 break;
-            case WARN:
+            case WARNING:
                 levelName = "W";
                 break;
             case ERROR:
@@ -82,7 +82,7 @@ public class LogLevel {
                 break;
             case "W":
             case "w":
-                logLevel = WARN;
+                logLevel = WARNING;
                 break;
             case "E":
             case "e":

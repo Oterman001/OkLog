@@ -31,5 +31,5 @@ dependencies {
 
     implementation project(':oklog')
 
-//    implementation 'com.github.Oterman1314:OkLog:v1.0.1'
+//    implementation 'com.github.Oterman1314:OkLog:v1.0.7'
 }

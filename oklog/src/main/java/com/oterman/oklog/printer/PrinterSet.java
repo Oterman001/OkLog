@@ -47,7 +47,7 @@ public class PrinterSet {
         return flag;
     }
 
-    public void handlePrintln(int logLevel, String tag, String message) {
+    public void handlePrintln(int logLevel, String tag, String message,int  depth) {
         for (Printer printer : mPrinterList) {
             LogConfig logConfig = printer.getLogConfig();
             if (logConfig == null) {//没有个性化配置，使用默认配置
@@ -58,27 +58,24 @@ public class PrinterSet {
             checkNeedPrint(logConfig, logLevel, tag, message);
 
             //根据配置，获取拼接后的msg
-            String fullMsg = getFullMsg(logConfig, message);
-
+            String fullMsg = getFullMsg(logConfig, message,depth);
             printer.println(logLevel, tag, fullMsg);
-
         }
 
     }
 
     public void handlePrintln(int logLevel, String tag, String message, boolean printTreadInfo,
-                              boolean printProcessInfo, boolean printStackTrace) {
+                              boolean printProcessInfo, boolean printStackTrace,int depth) {
         for (Printer printer : mPrinterList) {
             LogConfig logConfig = printer.getLogConfig();
             if (logConfig == null) {//没有个性化配置，使用默认配置
                 logConfig = sLogConfig;
             }
-
             //根据配置，检查是否需要打印
             checkNeedPrint(logConfig, logLevel, tag, message);
 
             //根据配置，获取拼接后的msg
-            String fullMsg = getFullMsg(logConfig, message, printTreadInfo, printProcessInfo, printStackTrace);
+            String fullMsg = getFullMsg(logConfig, message, printTreadInfo, printProcessInfo, printStackTrace,depth);
 
             printer.println(logLevel, tag, fullMsg);
 
@@ -96,13 +93,13 @@ public class PrinterSet {
     /**
      * 根据logConfig获取完整信息 包含线程信息  调用栈等
      */
-    private String getFullMsg(LogConfig logConfig, String msg) {
+    private String getFullMsg(LogConfig logConfig, String msg,int depth) {
         return getFullMsg(logConfig, msg, logConfig.mPrintThreadInfo, logConfig.mPrintProcessInfo,
-                logConfig.mPrintStackTrace);
+                logConfig.mPrintStackTrace,depth);
     }
 
     private String getFullMsg(LogConfig logConfig, String msg, boolean printTreadInfo, boolean printProcessInfo,
-                              boolean printStackTrace) {
+                              boolean printStackTrace,int depth) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -111,9 +108,8 @@ public class PrinterSet {
         sb.append(logConfig.getFormattedJson(msg));
 
         //如果不忽略自己的tag时，末尾加上堆栈信息
-
         if (!logConfig.mIgnoreTag) {
-            sb.append(logConfig.getStackTraceInfo(true));
+            sb.append(logConfig.getStackTraceInfo(printStackTrace,depth));
         }
 
         return sb.toString().trim();
@@ -126,39 +122,5 @@ public class PrinterSet {
             }
         }
         return null;
-    }
-
-    /**
-     * 添加远程输出
-     */
-    public boolean startRemotePrinter(String cmdLine, String ip, int port) {
-        //        if(mRemotePrinter!=null){
-        //            return false;
-        //        }
-        //
-        ////        mRemotePrinter = new RemotePrinter();
-        //        mPrinterList.add(mRemotePrinter);
-        //
-        //        mRemotePrinter.start(cmdLine,ip,port);
-
-        return true;
-    }
-
-    /**
-     * 停止远程输出
-     */
-    public boolean stopRemotePrinter() {
-        //        if(mRemotePrinter==null){
-        //            return false;
-        //        }
-        //
-        //        mRemotePrinter.stop();
-        //
-        //        boolean flag = mPrinterList.remove(mRemotePrinter);
-        //
-        //        mRemotePrinter=null;
-        //
-        //        return flag;
-        return false;
     }
 }
