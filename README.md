@@ -51,14 +51,14 @@ latestVersion的值为TAG的最新值；
                 .build();
     
         // 输出到文件中  输出到文件中要写文件权限
-        FilePrinter filePrinter = new FilePrinter
-                .Builder("supperapp", this)
-                .logConfig(logConfig)
-                .build();
+//    FilePrinter filePrinter = new FilePrinter
+//            .Builder("supperapp", this)
+//            .logConfig(logConfig)
+//            .build();
         // 输出到控制台 
         ConsolePrinter consolePrinter = new ConsolePrinter();
         
-        OkLog.init(this, logConfig,filePrinter,consolePrinter);
+        OkLog.init(this, logConfig,consolePrinter);
     }
 ```
 

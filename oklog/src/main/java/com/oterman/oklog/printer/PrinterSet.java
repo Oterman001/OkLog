@@ -47,6 +47,8 @@ public class PrinterSet {
         return flag;
     }
 
+
+
     public void handlePrintln(int logLevel, String tag, String message,int  depth) {
         for (Printer printer : mPrinterList) {
             LogConfig logConfig = printer.getLogConfig();
