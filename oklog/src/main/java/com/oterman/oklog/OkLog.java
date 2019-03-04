@@ -300,7 +300,7 @@ public class OkLog {
         if(sLogConfig.mIgnoreTag&&stackTraceDepth==1){
             tag =sLogConfig.getStackTraceInfo(true);
         }else {
-            tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag :  tag;
+            tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag :  sLogConfig.mTag+"_"+tag;
         }
         sPrinterSet.handlePrintln(logLevel, tag, msg,stackTraceDepth);
     }
