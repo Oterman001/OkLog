@@ -2,15 +2,9 @@ package com.oterman.oklog;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 import android.util.Log;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import com.oterman.oklog.common.LogConfig;
 import com.oterman.oklog.common.LogItem;
@@ -21,6 +15,13 @@ import com.oterman.oklog.printer.FilePrinter;
 import com.oterman.oklog.printer.Printer;
 import com.oterman.oklog.printer.PrinterSet;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by tian on 2017/8/21 0021.
  */
@@ -29,10 +30,11 @@ public class OkLog {
     public static Context sContext;
 
     private static PrinterSet sPrinterSet;//输出渠道
-    private static boolean  sIsInitialized = false;//检查是否初始化
+    private static boolean sIsInitialized = false;//检查是否初始化
     private static BlockingQueue<LogItem> sLogItems = null;
     private static volatile boolean needOnlineDebug = false;
     private static ScheduledExecutorService sScheduledThreadPool;
+    private static volatile Boolean isDebug ;
 
     /**
      * 初始化，默认配置，默认输出渠道为控制台
@@ -55,7 +57,7 @@ public class OkLog {
     /**
      * 自定义初始化
      *
-     * @param config  自定义Logcat配置
+     * @param config 自定义Logcat配置
      * @param printer 自定义日志输出渠道
      */
     public static void init(Context context, LogConfig config, Printer... printer) {
@@ -69,7 +71,8 @@ public class OkLog {
         sIsInitialized = true;
 
         //打印log头信息
-//        sPrinterSet.handlePrintln(LogLevel.VERBOSE,sLogConfig.mTag,LogUtils.getLogHeadInfo(sContext));
+//        sPrinterSet.handlePrintln(LogLevel.VERBOSE,sLogConfig.mTag,LogUtils.getLogHeadInfo
+// (sContext));
 
         //是否捕获crash信息
         initCrashCofig();
@@ -84,23 +87,27 @@ public class OkLog {
      * 每隔1s去检测ANR是否发生
      */
     private static void initDetectAnr() {
-        if (sLogConfig.mDetectANR){
+        if (sLogConfig.mDetectANR) {
             sScheduledThreadPool = Executors.newScheduledThreadPool(1);
-            final ActivityManager activityManager = (ActivityManager) sContext.getSystemService(Context.ACTIVITY_SERVICE);
+            final ActivityManager activityManager = (ActivityManager) sContext.getSystemService(
+                    Context.ACTIVITY_SERVICE);
 
             sScheduledThreadPool.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    List<ActivityManager.ProcessErrorStateInfo> processList = activityManager.getProcessesInErrorState();
+                    List<ActivityManager.ProcessErrorStateInfo> processList =
+                            activityManager.getProcessesInErrorState();
                     if (processList != null) {
-                        Iterator<ActivityManager.ProcessErrorStateInfo> iterator = processList.iterator();
+                        Iterator<ActivityManager.ProcessErrorStateInfo> iterator =
+                                processList.iterator();
                         while (iterator.hasNext()) {
                             ActivityManager.ProcessErrorStateInfo processInfo = iterator.next();
                             Log.d("OkLog", "ANR come!!!!!!!!");
                             //导出trace文件到目录下
                             String traceFileName = LogUtils.exportTraceFile();
                             //日志文件中打印anr信息
-                            String anrInfo = LogUtils.getAnrInfo(processInfo, traceFileName, sContext);
+                            String anrInfo = LogUtils.getAnrInfo(processInfo, traceFileName,
+                                    sContext);
                             sPrinterSet.printCrash(sLogConfig.mTag, anrInfo);
 
                             sScheduledThreadPool.shutdownNow();
@@ -110,8 +117,8 @@ public class OkLog {
                 }
 
             }, 0, 1, TimeUnit.SECONDS);
-        }else {
-            Log.e("OkLog","不检测anr");
+        } else {
+            Log.e("OkLog", "不检测anr");
         }
 
 
@@ -123,7 +130,8 @@ public class OkLog {
     private static void initCrashCofig() {
         if (sLogConfig.mPrintCrash) {
             //捕获全局信息
-            final Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+            final Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler =
+                    Thread.getDefaultUncaughtExceptionHandler();
 
             Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                 @Override
@@ -157,15 +165,15 @@ public class OkLog {
         v(null, msg);
     }
 
-    public static void v(String msg,int stackTraceDepth) {
-        v(null, msg,stackTraceDepth);
+    public static void v(String msg, int stackTraceDepth) {
+        v(null, msg, stackTraceDepth);
     }
 
     public static void v(String tag, String msg) {
         v(tag, msg, 1);
     }
 
-    public static void v(String tag, String msg, int  stackTraceDepth) {
+    public static void v(String tag, String msg, int stackTraceDepth) {
         checkInitialized();
         handlePrint(LogLevel.VERBOSE, tag, msg, stackTraceDepth);
     }
@@ -173,24 +181,25 @@ public class OkLog {
     public static void v(String msg, Throwable throwable) {
         v(null, msg, throwable);
     }
+
     public static void v(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        handlePrint (LogLevel.VERBOSE, tag, msg, throwable);
+        handlePrint(LogLevel.VERBOSE, tag, msg, throwable);
     }
 
     public static void d(String msg) {
         d(null, msg);
     }
 
-    public static void d(String msg,int stackTraceDepth) {
-        d(null, msg,stackTraceDepth);
+    public static void d(String msg, int stackTraceDepth) {
+        d(null, msg, stackTraceDepth);
     }
 
     public static void d(String tag, String msg) {
         d(tag, msg, 1);
     }
 
-    public static void d(String tag, String msg, int  stackTraceDepth) {
+    public static void d(String tag, String msg, int stackTraceDepth) {
         checkInitialized();
         handlePrint(LogLevel.DEBUG, tag, msg, stackTraceDepth);
     }
@@ -198,25 +207,26 @@ public class OkLog {
     public static void d(String msg, Throwable throwable) {
         d(null, msg, throwable);
     }
+
     public static void d(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        handlePrint (LogLevel.DEBUG, tag, msg, throwable);
+        handlePrint(LogLevel.DEBUG, tag, msg, throwable);
     }
-    
+
 
     public static void i(String msg) {
         i(null, msg);
     }
 
-    public static void i(String msg,int stackTraceDepth) {
-        i(null, msg,stackTraceDepth);
+    public static void i(String msg, int stackTraceDepth) {
+        i(null, msg, stackTraceDepth);
     }
 
     public static void i(String tag, String msg) {
         i(tag, msg, 1);
     }
 
-    public static void i(String tag, String msg, int  stackTraceDepth) {
+    public static void i(String tag, String msg, int stackTraceDepth) {
         checkInitialized();
         handlePrint(LogLevel.INFO, tag, msg, stackTraceDepth);
     }
@@ -224,9 +234,10 @@ public class OkLog {
     public static void i(String msg, Throwable throwable) {
         i(null, msg, throwable);
     }
+
     public static void i(String tag, String msg, Throwable throwable) {
         checkInitialized();
-        handlePrint (LogLevel.INFO, tag, msg, throwable);
+        handlePrint(LogLevel.INFO, tag, msg, throwable);
     }
 
 
@@ -234,15 +245,15 @@ public class OkLog {
         w(null, msg);
     }
 
-    public static void w(String msg,int stackTraceDepth) {
-        w(null, msg,stackTraceDepth);
+    public static void w(String msg, int stackTraceDepth) {
+        w(null, msg, stackTraceDepth);
     }
 
     public static void w(String tag, String msg) {
         w(tag, msg, 1);
     }
 
-    public static void w(String tag, String msg, int  stackTraceDepth) {
+    public static void w(String tag, String msg, int stackTraceDepth) {
         checkInitialized();
         handlePrint(LogLevel.WARNING, tag, msg, stackTraceDepth);
     }
@@ -260,15 +271,15 @@ public class OkLog {
         e(null, msg);
     }
 
-    public static void e(String msg,int stackTraceDepth) {
-        e(null, msg,stackTraceDepth);
+    public static void e(String msg, int stackTraceDepth) {
+        e(null, msg, stackTraceDepth);
     }
 
     public static void e(String tag, String msg) {
         e(tag, msg, 1);
     }
 
-    public static void e(String tag, String msg, int  stackTraceDepth) {
+    public static void e(String tag, String msg, int stackTraceDepth) {
         checkInitialized();
         handlePrint(LogLevel.ERROR, tag, msg, stackTraceDepth);
     }
@@ -288,21 +299,21 @@ public class OkLog {
     private static void handlePrint(int logLevel, String tag, String msg, Throwable tr) {
         String trMsg = LogUtils.getThrowableInfo(tr);
         msg = msg + "\n" + trMsg;
-        handlePrint(logLevel, tag, msg,1);
+        handlePrint(logLevel, tag, msg, 1);
     }
 
 
     /**
      * 处理日志的输出
      */
-    private static void handlePrint(int logLevel, String tag, String msg, int stackTraceDepth ) {
+    private static void handlePrint(int logLevel, String tag, String msg, int stackTraceDepth) {
         //需要输出
-        if(sLogConfig.mIgnoreTag&&stackTraceDepth==1){
-            tag =sLogConfig.getStackTraceInfo(true);
-        }else {
-            tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag :  sLogConfig.mTag+"_"+tag;
+        if (sLogConfig.mIgnoreTag && stackTraceDepth == 1) {
+            tag = sLogConfig.getStackTraceInfo(true);
+        } else {
+            tag = TextUtils.isEmpty(tag) ? sLogConfig.mTag : sLogConfig.mTag + "_" + tag;
         }
-        sPrinterSet.handlePrintln(logLevel, tag, msg,stackTraceDepth);
+        sPrinterSet.handlePrintln(logLevel, tag, msg, stackTraceDepth);
     }
 
 
@@ -316,6 +327,30 @@ public class OkLog {
         if (filePrinter != null) {
             Log.d("OkLog", "开始将缓存写入文件");
             filePrinter.flushCacheLogToFile();
+        }
+    }
+
+
+    public static void setDebugMode() {
+        isDebug = true;
+    }
+
+    public static void setReleaseMode() {
+        isDebug = false;
+    }
+
+    public static boolean isDebug() {
+        return isDebug != null && isDebug;
+    }
+
+    public static void syncIsDebug(Context context) {
+        if (context == null) {
+            return;
+        }
+
+        if (isDebug == null) {
+            isDebug = context.getApplicationInfo() != null
+                    && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         }
     }
 

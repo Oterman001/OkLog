@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         OkLog.v(TAG, "传入tag,这是一个json字符串！！！json={\"level\": \"较不适宜\",\"name\": \"wash_car\","
                 + "\"sugg\": \"不适合洗车，未来24小时内有雨，雨水可能会再次弄脏你的车\"}", 100);
 
-        OkLog.v("这里是一个异常！",new Throwable("哈哈哈，异常来啦！"));
+        OkLog.v("这里是一个异常！", new Throwable("哈哈哈，异常来啦！"));
 
         OkLog.d("onCreate:不打印堆栈深度，没有tag");
         OkLog.d("onCreate:长度2", 2);
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         OkLog.i(TAG, "传入tag,打印1级堆栈深度！", 1);
         OkLog.i(TAG, "传入tag,打印3级堆栈深度！！", 3);
         OkLog.i(TAG, "传入tag,打印100级堆栈深度！！！！！", 100);
-        
-        
+
+
         OkLog.w("onCreate:不打印堆栈深度，没有tag");
         OkLog.w("onCreate:长度2", 2);
         OkLog.w("onCreate:堆栈深度为5", 5);
@@ -102,8 +102,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initLog() {
+        OkLog.syncIsDebug(this);
         LogConfig logConfig = new LogConfig.Builder()
-                .logLevel( LogLevel.DEBUG)
+                .logLevel(OkLog.isDebug() ? LogLevel.ALL : LogLevel.OFF)
                 .formatJson(true)
                 .printCrash(true)
                 .detectANR(false)
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         ConsolePrinter consolePrinter = new ConsolePrinter();
-        OkLog.init(this, logConfig,filePrinter,consolePrinter);
+        OkLog.init(this, logConfig, filePrinter, consolePrinter);
     }
 
 }
