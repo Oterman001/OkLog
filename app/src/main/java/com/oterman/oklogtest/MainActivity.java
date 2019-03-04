@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initLog() {
         LogConfig logConfig = new LogConfig.Builder()
-                .logLevel(BuildConfig.DEBUG ? LogLevel.ALL : LogLevel.OFF)
+                .logLevel( LogLevel.DEBUG)
                 .formatJson(true)
                 .printCrash(true)
                 .detectANR(false)

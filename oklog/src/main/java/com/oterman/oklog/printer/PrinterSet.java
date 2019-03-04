@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.oterman.oklog.OkLog;
 import com.oterman.oklog.common.LogConfig;
+import com.oterman.oklog.filter.IFilter;
 
 import android.os.Process;
 
@@ -57,11 +58,11 @@ public class PrinterSet {
             }
 
             //根据配置，检查是否需要打印
-            checkNeedPrint(logConfig, logLevel, tag, message);
-
-            //根据配置，获取拼接后的msg
-            String fullMsg = getFullMsg(logConfig, message,depth);
-            printer.println(logLevel, tag, fullMsg);
+            if (checkNeedPrint(logConfig, logLevel, tag, message)){
+                //根据配置，获取拼接后的msg
+                String fullMsg = getFullMsg(logConfig, message,depth);
+                printer.println(logLevel, tag, fullMsg);
+            }
         }
 
     }
