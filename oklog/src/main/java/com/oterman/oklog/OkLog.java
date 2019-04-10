@@ -31,8 +31,6 @@ public class OkLog {
 
     private static PrinterSet sPrinterSet;//输出渠道
     private static boolean sIsInitialized = false;//检查是否初始化
-    private static BlockingQueue<LogItem> sLogItems = null;
-    private static volatile boolean needOnlineDebug = false;
     private static ScheduledExecutorService sScheduledThreadPool;
     private static volatile Boolean isDebug ;
 
@@ -120,8 +118,14 @@ public class OkLog {
         } else {
             Log.e("OkLog", "不检测anr");
         }
+    }
 
+    public static void addPrinter(Printer printer){
+        sPrinterSet.addPrinter(printer);
+    }
 
+    public static void removePrinter(Printer printer){
+        sPrinterSet.removePrinter(printer);
     }
 
     /**

@@ -25,6 +25,18 @@ public class PrinterSet {
         mPrinterList = Arrays.asList(printer);
     }
 
+    public void addPrinter(Printer printer){
+        mPrinterList.add(printer);
+    }
+
+    public void removePrinter(Printer printer){
+        try {
+            mPrinterList.remove(printer);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 检查是否需要打印
      */
@@ -81,7 +93,6 @@ public class PrinterSet {
             String fullMsg = getFullMsg(logConfig, message, printTreadInfo, printProcessInfo, printStackTrace,depth);
 
             printer.println(logLevel, tag, fullMsg);
-
         }
 
     }
