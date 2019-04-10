@@ -42,8 +42,9 @@ latestVersion的值为TAG的最新值；
 
 ```
     private void initLog() {
+        OkLog.syncIsDebug(this);
         LogConfig logConfig = new LogConfig.Builder()
-                .logLevel(BuildConfig.DEBUG ? LogLevel.ALL : LogLevel.OFF)
+                .logLevel(OkLog.isDebug() ? LogLevel.ALL : LogLevel.OFF)
                 .formatJson(true) // 是否格式化json数据
                 .printCrash(true) // 是否打印崩溃
                 .detectANR(false) // 是否检测anr 
