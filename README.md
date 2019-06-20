@@ -12,6 +12,7 @@
 
 这些需求，使用OkLog爽爽的搞定！
 
+>  https://jitpack.io/#Oterman001/OkLog
 # 引入OkLog
 ## 第一步  添加仓库地址
 在Android 工程根目录的grade文件中添加仓库： 
